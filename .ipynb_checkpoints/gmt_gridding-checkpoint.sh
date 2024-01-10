@@ -18,7 +18,7 @@ median="/gpfs/data1/vclgp/xiongl/GEDIglobal/result/X_${grid_x}_Y_${grid_y}.txt"
 #PS='/gpfs/data1/vclgp/xiongl/GEDIglobal/result/plot.ps'
 tif="/gpfs/data1/vclgp/xiongl/GEDIglobal/result/X_${grid_x}_Y_${grid_y}.tif"
 csv="/gpfs/data1/vclgp/xiongl/GEDIglobal/data_tiles/X${grid_x}_Y${grid_y}.csv" 
-echo $csv
+#echo $csv
 gmt blockmedian $csv  $R $I -h  > $median # (x,y,z) triples
 gmt xyz2grd $median $R $I -G$grd
 
