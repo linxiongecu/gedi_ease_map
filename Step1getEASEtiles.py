@@ -23,7 +23,6 @@ def get_tiles_x_y(grid_x = 1, grid_y = 1):
         y_up_left = ease2_origin[1] - (grid_y - 1)*ease2_binsize[1]
         xmin = x_up_left
         xmax = x_up_left + ease2_binsize[0]
-        if grid_x == 12: xmax = xmax-0.1
         ymin = y_up_left - ease2_binsize[1]
         ymax = y_up_left
         return xmin, xmax, ymin, ymax
