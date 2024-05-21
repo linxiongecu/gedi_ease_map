@@ -1,6 +1,13 @@
 # gedi_ease_map
 using EASE grid to plot global canopy height map
 # idea to make the plot
+
+1 GEDI --> quality shots 
+
+
+
+
+######################################################out of date############################################
 ## Step 1 make ease tiles
 binsize = 1000 , tilesize_x = 2481, tilesize_y = 2438, ease2_origin = -17367000, 7314000
 

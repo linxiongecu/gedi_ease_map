@@ -12,8 +12,9 @@ import subprocess
 # Specify the gdal_merge.py command as a list of strings
 gdal_merge_command = [
     'gdal_merge.py',
-    '-o', 'mosaic.tif',
-    '--optfile', 'tiff_list.txt'
+    '-o', '../plot/gedi_mosaic.tif',
+    '--optfile', 'tiff_list.txt',
+    '-init',  '-999'
 ]
 # Execute the command using subprocess
 try:

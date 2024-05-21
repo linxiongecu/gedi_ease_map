@@ -25,10 +25,49 @@ def get_tiles_x_y(grid_x = 1, grid_y = 1):
         y_up_left = ease2_origin[1] - (grid_y - 1)*ease2_binsize[1]
         xmin = x_up_left
         xmax = x_up_left + ease2_binsize[0]
-        if grid_x == 12: xmax = xmax-0.1
         ymin = y_up_left - ease2_binsize[1]
         ymax = y_up_left
         return xmin, xmax, ymin, ymax
+
+def get_tiles_x_y_new(grid_x = 1, grid_y = 1): # x: 1-12, y: 1-10
+        xmin = -180 + (grid_x - 1 )*30
+        xmax = -180 + grid_x *30
+        if grid_y  == 1: 
+            ymin=-52
+            ymax=-50
+        if grid_y  == 2: 
+            ymin=-50
+            ymax=-46
+        if grid_y  == 3: 
+            ymin=-46
+            ymax=-38
+        if grid_y  == 4: 
+            ymin=-38
+            ymax=-22
+        if grid_y  == 5: 
+            ymin=-22
+            ymax=0
+        if grid_y  == 6: 
+            ymin=0
+            ymax=22
+        if grid_y  == 7: 
+            ymin=22
+            ymax=38
+        if grid_y  == 8: 
+            ymin=38
+            ymax=46
+        if grid_y  == 9: 
+            ymin=46
+            ymax=50
+        if grid_y  == 10: 
+            ymin=50
+            ymax=52
+        #print(xmin,xmax, ymin, ymax)
+        transformer = Transformer.from_crs('epsg:4326', 'epsg:6933', always_xy=True)
+        ease_xmin, ease_ymin = transformer.transform(xmin,ymin)
+        ease_xmax, ease_ymax = transformer.transform(xmax,ymax)
+        return int(ease_xmin/1000)*1000, int(ease_xmax/1000)*1000, int(ease_ymin/1000)*1000, int(ease_ymax/1000)*1000
+
 def ease_csv(data = '/gpfs/data1/vclgp/xiongl/GEDIglobal/data_tiles/X4_Y4.parquet', skip=False):
     out_csv =  data.replace('.parquet', '.csv') 
     if skip and os.path.exists(out_csv): return
@@ -41,17 +80,19 @@ def ease_csv(data = '/gpfs/data1/vclgp/xiongl/GEDIglobal/data_tiles/X4_Y4.parque
         'Y': y,
         'rh_098': df['rh_098']
     })
+    # Rounding to 2 decimal places, save place.
+    csv_df = csv_df.round(2)
     csv_df.to_csv(out_csv, index=False)
 
 
 
-def gridding2tif(data = '/gpfs/data1/vclgp/xiongl/GEDIglobal/data_tiles/X4_Y4.csv', skip=False)):
+def gridding2tif(data = '/gpfs/data1/vclgp/xiongl/GEDIglobal/data_tiles/X4_Y4.csv', skip=False):
         file_name = os.path.basename(data)
         out_tif =  '/gpfs/data1/vclgp/xiongl/GEDIglobal/result/' + file_name.replace('.csv', '.tif') 
         if skip and os.path.exists(out_tif): return
         i = int(os.path.basename(data)[:-4].split('_')[0][1:])
         j = int(os.path.basename(data)[:-4].split('_')[1][1:])
-        xmin, xmax, ymin, ymax = get_tiles_x_y(i, j)
+        xmin, xmax, ymin, ymax = get_tiles_x_y_new(i, j)
         # Run the shell script
         subprocess.run(['bash', 'gmt_gridding.sh', str(xmin), str(xmax), str(ymin),str(ymax), str(i), str(j)])
 
